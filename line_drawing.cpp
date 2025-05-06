@@ -36,9 +36,17 @@ void drawLineDDA(Point p1, Point p2) {
     float y = p1.y;
 
     for (int i = 0; i <= steps; ++i) {
-        if (currentStyle == DOTTED && i % 4 != 0) continue;
-        if (currentStyle == DASHED && (i / 5) % 2 == 1) continue;
-        setPixel(round(x), round(y));
+        bool draw = true;
+
+        if (currentStyle == DOTTED)
+            draw = (i % 4 == 0);
+        else if (currentStyle == DASHED)
+            draw = ((i / 5) % 2 == 0);
+        // SOLID and SIMPLE behave the same here
+
+        if (draw)
+            setPixel(round(x), round(y));
+
         x += xInc;
         y += yInc;
     }
@@ -137,6 +145,17 @@ void init() {
 }
 
 int main(int argc, char** argv) {
+    std::cout << "=== Line Drawing Application ===\n";
+    std::cout << "Mouse Controls:\n";
+    std::cout << "  - Left Click  : Set first point\n";
+    std::cout << "  - Right Click : Set second point and draw the line\n";
+    std::cout << "\nKeyboard Controls:\n";
+    std::cout << "  '1' : Use DDA Algorithm\n";
+    std::cout << "  '2' : Use Bresenham Algorithm\n";
+    std::cout << "  'a' : Simple Line Style\n";
+    std::cout << "  's' : Dotted Line Style\n";
+    std::cout << "  'd' : Dashed Line Style\n";
+    std::cout << "  'f' : Solid Line Style (same as simple for now)\n";
     glutInit(&argc, argv);
     glutInitWindowSize(500, 500);
     glutCreateWindow("Line Drawing with DDA and Bresenham");
